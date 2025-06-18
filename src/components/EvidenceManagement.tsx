@@ -6,7 +6,10 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
+import { MessageCircle, Upload } from 'lucide-react';
 import QRScanner from './QRScanner';
+import TerminalChatbot from './TerminalChatbot';
+import FileUploadEvidence from './FileUploadEvidence';
 
 interface EvidenceManagementProps {
   currentUser: any;
@@ -28,6 +31,8 @@ const EvidenceManagement = ({ currentUser, onNotification }: EvidenceManagementP
     timestamp: string;
     officer: string;
   }>>([]);
+
+  const [isChatbotOpen, setIsChatbotOpen] = useState(false);
 
   const { toast } = useToast();
 
@@ -96,12 +101,26 @@ const EvidenceManagement = ({ currentUser, onNotification }: EvidenceManagementP
           <span className="text-white">{currentUser.username}</span>
           <span className="text-gray-400 ml-2">({currentUser.role})</span>
         </div>
+        
+        {/* Chatbot Launcher */}
+        <div className="mt-6">
+          <Button
+            onClick={() => setIsChatbotOpen(true)}
+            className="bg-forensic-green hover:bg-forensic-green/80 text-black font-bold px-6 py-3"
+          >
+            <MessageCircle className="w-5 h-5 mr-2" />
+            Open Terminal Assistant
+          </Button>
+        </div>
       </div>
 
       <Tabs defaultValue="add" className="max-w-4xl mx-auto">
-        <TabsList className="grid w-full grid-cols-5 bg-forensic-gray border border-forensic-green/30">
+        <TabsList className="grid w-full grid-cols-6 bg-forensic-gray border border-forensic-green/30">
           <TabsTrigger value="add" className="data-[state=active]:bg-forensic-green data-[state=active]:text-black">
             Add Evidence
+          </TabsTrigger>
+          <TabsTrigger value="upload" className="data-[state=active]:bg-forensic-blue data-[state=active]:text-black">
+            Upload Files
           </TabsTrigger>
           <TabsTrigger value="transfer" className="data-[state=active]:bg-forensic-green data-[state=active]:text-black">
             Transfer Custody
@@ -177,6 +196,10 @@ const EvidenceManagement = ({ currentUser, onNotification }: EvidenceManagementP
               </form>
             </CardContent>
           </Card>
+        </TabsContent>
+
+        <TabsContent value="upload">
+          <FileUploadEvidence currentUser={currentUser} onNotification={onNotification} />
         </TabsContent>
 
         <TabsContent value="transfer">
@@ -327,6 +350,14 @@ const EvidenceManagement = ({ currentUser, onNotification }: EvidenceManagementP
           <QRScanner currentUser={currentUser} onNotification={onNotification} />
         </TabsContent>
       </Tabs>
+
+      {/* Terminal Chatbot */}
+      <TerminalChatbot 
+        isOpen={isChatbotOpen}
+        onClose={() => setIsChatbotOpen(false)}
+        currentUser={currentUser}
+        onNotification={onNotification}
+      />
     </div>
   );
 };
