@@ -8,6 +8,10 @@ import EvidenceManagement from '../components/EvidenceManagement';
 import Contact from '../components/Contact';
 import Footer from '../components/Footer';
 import NotificationSystem from '../components/NotificationSystem';
+import LawsAndForms from '../components/LawsAndForms';
+import TerminalChatbot from '../components/TerminalChatbot';
+import { Button } from '@/components/ui/button';
+import { MessageSquare } from 'lucide-react';
 
 // Dummy user database with evidence access
 const DUMMY_USERS = [
@@ -20,6 +24,7 @@ const Index = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [notifications, setNotifications] = useState([]);
+  const [isChatbotOpen, setIsChatbotOpen] = useState(false);
 
   const handleLogin = (username: string, password: string) => {
     const user = DUMMY_USERS.find(u => u.username === username && u.password === password);
@@ -35,6 +40,7 @@ const Index = () => {
   const handleLogout = () => {
     setIsLoggedIn(false);
     setCurrentUser(null);
+    setIsChatbotOpen(false);
     console.log('User logged out');
   };
 
@@ -71,6 +77,10 @@ const Index = () => {
         <Features />
       </section>
 
+      <section id="laws" className="py-20">
+        <LawsAndForms />
+      </section>
+
       {!isLoggedIn ? (
         <section id="login" className="py-20">
           <LoginForm onLogin={handleLogin} dummyUsers={DUMMY_USERS} />
@@ -89,6 +99,25 @@ const Index = () => {
       </section>
 
       <Footer />
+
+      {/* Chatbot Toggle Button - Only show when logged in */}
+      {isLoggedIn && (
+        <Button
+          onClick={() => setIsChatbotOpen(true)}
+          className="fixed bottom-6 right-6 z-40 bg-forensic-green hover:bg-forensic-green/80 text-black font-bold rounded-full w-14 h-14 shadow-lg"
+          size="lg"
+        >
+          <MessageSquare className="w-6 h-6" />
+        </Button>
+      )}
+
+      {/* Terminal Chatbot */}
+      <TerminalChatbot
+        isOpen={isChatbotOpen}
+        onClose={() => setIsChatbotOpen(false)}
+        currentUser={currentUser}
+        onNotification={addNotification}
+      />
     </div>
   );
 };

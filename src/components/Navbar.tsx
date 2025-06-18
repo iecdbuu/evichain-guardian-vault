@@ -46,6 +46,12 @@ const Navbar = ({ isLoggedIn, onLogout }: NavbarProps) => {
               Features
             </button>
             <button
+              onClick={() => scrollToSection('laws')}
+              className="text-white hover:text-forensic-green transition-colors"
+            >
+              Laws & Forms
+            </button>
+            <button
               onClick={() => scrollToSection('contact')}
               className="text-white hover:text-forensic-green transition-colors"
             >
@@ -105,6 +111,12 @@ const Navbar = ({ isLoggedIn, onLogout }: NavbarProps) => {
                 className="text-white hover:text-forensic-green transition-colors text-left"
               >
                 Features
+              </button>
+              <button
+                onClick={() => scrollToSection('laws')}
+                className="text-white hover:text-forensic-green transition-colors text-left"
+              >
+                Laws & Forms
               </button>
               <button
                 onClick={() => scrollToSection('contact')}
