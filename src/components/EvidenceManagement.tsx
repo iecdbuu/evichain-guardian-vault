@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,8 +6,14 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
+import QRScanner from './QRScanner';
 
-const EvidenceManagement = () => {
+interface EvidenceManagementProps {
+  currentUser: any;
+  onNotification: (message: string, type?: 'warning' | 'alert') => void;
+}
+
+const EvidenceManagement = ({ currentUser, onNotification }: EvidenceManagementProps) => {
   const [evidenceData, setEvidenceData] = useState({
     id: '',
     description: '',
@@ -86,10 +91,15 @@ const EvidenceManagement = () => {
         <p className="text-gray-300 text-lg">
           Secure evidence management powered by blockchain technology
         </p>
+        <div className="mt-4 text-center">
+          <span className="text-forensic-blue font-semibold">Logged in as: </span>
+          <span className="text-white">{currentUser.username}</span>
+          <span className="text-gray-400 ml-2">({currentUser.role})</span>
+        </div>
       </div>
 
       <Tabs defaultValue="add" className="max-w-4xl mx-auto">
-        <TabsList className="grid w-full grid-cols-4 bg-forensic-gray border border-forensic-green/30">
+        <TabsList className="grid w-full grid-cols-5 bg-forensic-gray border border-forensic-green/30">
           <TabsTrigger value="add" className="data-[state=active]:bg-forensic-green data-[state=active]:text-black">
             Add Evidence
           </TabsTrigger>
@@ -101,6 +111,9 @@ const EvidenceManagement = () => {
           </TabsTrigger>
           <TabsTrigger value="qr" className="data-[state=active]:bg-forensic-green data-[state=active]:text-black">
             QR Code
+          </TabsTrigger>
+          <TabsTrigger value="scanner" className="data-[state=active]:bg-forensic-green data-[state=active]:text-black">
+            QR Scanner
           </TabsTrigger>
         </TabsList>
 
@@ -308,6 +321,10 @@ const EvidenceManagement = () => {
               </div>
             </CardContent>
           </Card>
+        </TabsContent>
+
+        <TabsContent value="scanner">
+          <QRScanner currentUser={currentUser} onNotification={onNotification} />
         </TabsContent>
       </Tabs>
     </div>
